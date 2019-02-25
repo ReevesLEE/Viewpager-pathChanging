@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>轮播图-更改图片路径</title>
+        <style type="text/css" media="screen">
+            * {
+                margin: 0;
+                padding: 0;
+            }
+
+            .main {
+                width: 730px;
+                height: 454px;
+                background: url("./images/ad01.jpg");
+                margin: 0 auto;
+                cursor: pointer;
+            }
+
+            .left {
+                width: 30px;
+                height: 62px;
+                background: url("./images/lwhite.png");
+                float: left;
+                top: 50%;
+                position: relative;
+                transform:translateY(-50%);
+                display: none;
+            }
+
+            .right {
+                width: 30px;
+                height: 62px;
+                background: url("./images/rwhite.png");
+                float: right;
+                top: 50%;
+                position: relative;
+                transform:translateY(-50%);
+                display: none;
+            }
+
+            .num {
+                width: 210px;
+                height: 30px;
+                float: right;
+                top: 410px;
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .num li {
+                list-style: none;
+                height: 30px;
+                line-height: 30px;
+                width: 30px;
+                float: left;
+                background: #3e3e3e;
+                text-align: center;
+                color:#fff;
+                border-radius: 50%;
+                margin-left: 5px;
+                font-size: 12px;
+            }
+
+            .num li:hover {
+                background: #b61b1f;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div class="main">
+            <div class="left">
+
+            </div>
+            <div class="right">
+
+            </div>
+            <div class="num">
+                <ul>
+                    <li>1</li>
+                    <li>2</li>
+                    <li>3</li>
+                    <li>4</li>
+                    <li>5</li>
+                    <li>6</li>
+                </ul>
+            </div>
+        </div>
+    </body>
+    <script type="text/javascript">
+        var box = document.querySelector(".main");
+        var left = document.querySelector(".left");
+        var right = document.querySelector(".right");
+        var lis = document.querySelectorAll("li");
+        var len = lis.length;
+
+        box.addEventListener("mouseover", function() {
+            left.style.display = "block";
+            right.style.display = "block";
+        });
+
+        box.addEventListener("mouseout", function() {
+            left.style.display = "none";
+            right.style.display = "none";
+        });
+
+        var add = 1;
+        //默认第一张小圆点红色
+        lis[0].style.background = "#b61b1f";
+
+        //左键上一张
+        left.addEventListener("click", function() {
+            add = add - 1
+            if (add < 1) {
+                add = 6;
+            }
+            box.style.background = "url('./images/ad0"+add+".jpg')";
+            pointChange();
+        });
+
+        //右键下一张
+        right.addEventListener("click", function() {
+            add = add + 1
+            if (add > 6) {
+                add = 1;
+            }
+            box.style.background = "url('./images/ad0"+add+".jpg')";
+            pointChange();
+        });
+
+//图片下面的小圆点变色
+        var pointChange = function() {
+            var x = add - 1;
+            for (var i = 0; i < len; i++) {
+                lis[i].style.background = "#3e3e3e";
+                if (x == i) {
+                    lis[i].style.background = "#b61b1f";
+                }
+            }
+        };
+
+        //总体轮播
+        var lun1 = setInterval(function(){
+            add = add + 1;
+            if (add > 6) {
+                add = 1;
+            }
+            box.style.background = "url('./images/ad0"+add+".jpg')";
+            pointChange();
+        }, 2000);
+
+        var doPointer = function() {
+            for (var i = 0; i < lis.length; i++) {
+                lis[i].addEventListener("click", function() {
+                    clearInterval(lun1);
+                    clearInterval(lun);
+                    for (var i = 0; i < lis.length; i++) {
+                        lis[i].style.background = "#3e3e3e";
+                    };
+                    this.style.background = "#b61b1f";
+                    var z = this.innerHTML;
+                    // console.log("z1=", z)
+                    box.style.background = "url('./images/ad0"+z+".jpg')";
+                    var f = parseInt(z);
+                    var lun = setInterval(function() {
+                        if (f > 5) {
+                            f = 0;
+                        }
+                        f = f + 1;
+                        console.log("z2=", f)
+                        box.style.background = "url('./images/ad0"+f+".jpg')";
+                        for (var i = 0; i < lis.length; i++) {
+                            lis[i].style.background = "#3e3e3e";
+                            if ((i - 1) == f) {
+                                // console.log("i=", i)
+                                lis[i].style.background = "#b61b1f";
+                            }
+                        }
+                    }, 1000);
+                });
+            }
+        }
+
+        // doPointer();
+    </script>
+</html>
